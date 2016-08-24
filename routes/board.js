@@ -26,4 +26,15 @@ router.get('/', function(req, res, next) {
     }
 });
 
+// GET, 공지사항, 이벤트 목록
+router.get('/:bid', function (req, res, next) {
+    var boardNo = req.params.bid;
+
+    res.send({
+        results: {
+            image: "http://server:pot/images/board/filename.jpg"
+        }
+    });
+});
+
 module.exports = router;
