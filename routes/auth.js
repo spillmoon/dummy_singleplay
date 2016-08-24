@@ -25,16 +25,33 @@ passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password
             done(null, user);
         })
     });
+    // var userEmail = 'test@naver.com';
+    // var password = '123';
+    //
+    // if ((userEmail === req.body.email) && (password === req.body.password)) {
+    //     res.send({
+    //         message: '성공'
+    //     });
+    // }
+    // res.send({
+    //     message: '실패'
+    // });
 }));
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-    User.findCustomer(id, function(err, user) {
+passport.deserializeUser(function(userEmail, done) {
+    // User.findCustomer(id, function(err, user) {
+    //     if (err) {
+    //         return done(err);
+    //     }
+    //     done(null, user);
+    // });
+    User.findUser(userEmail, function(err, user) {
         if (err) {
-            return done(err);
+            done(err);
         }
         done(null, user);
     });
@@ -86,12 +103,12 @@ router.post('/local/login', function(req, res, next) {
         });
     })(req, res, next);
 }, function(req, res, next) {
-    var user = {};
-    user.email = req.user.email;
-    user.name = req.user.name;
+    // var user = {};
+    // user.email = req.user.email;
+    // user.name = req.user.name;
     res.send({
-        message: 'local login',
-        user: user
+        message: 'local login'
+        //user: user
     });
 });
 
@@ -100,14 +117,14 @@ router.get('/local/logout', function(req, res, next) {
     res.send({ message: 'local logout' });
 });
 
-router.get('/facebook', passport.authenticate('facebook', {scope : ['email']}));
-
-router.get('/facebook/callback', passport.authenticate('facebook'), function(req, res, next) {
-    res.send({ message: 'facebook callback' });
-});
-
-router.post('/facebook/token', passport.authenticate('facebook-token', {scope : ['email']}), function(req, res, next) {
-    res.send(req.user? '성공' : '실패');
-});
+// router.get('/facebook', passport.authenticate('facebook', {scope : ['email']}));
+//
+// router.get('/facebook/callback', passport.authenticate('facebook'), function(req, res, next) {
+//     res.send({ message: 'facebook callback' });
+// });
+//
+// router.post('/facebook/token', passport.authenticate('facebook-token', {scope : ['email']}), function(req, res, next) {
+//     res.send(req.user? '성공' : '실패');
+// });
 
 module.exports = router;

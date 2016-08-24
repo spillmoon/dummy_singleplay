@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var isSecure = require('./common').isSecure;
+var isAuthenticated = require('./common').isAuthenticated;
 //var Wishlist = require('../models/wishlist');
-//var isAuthenticated = require('./common').isAuthenticated;
+
 
 // GET, 위시리스트 목록
-router.get('/', isSecure, function(req, res, next) {
+router.get('/', isSecure, isAuthenticated, function(req, res, next) {
     if (req.url.match(/\?sort=\d+&start=\d+/i)) {
         var startIndex = parseInt(req.query.start, 10);
         res.send({
@@ -34,7 +35,7 @@ router.get('/', isSecure, function(req, res, next) {
 });
 
 // POST, 위시리스트 추가
-router.post('/', isSecure, function(req, res, next) {
+router.post('/', isSecure, isAuthenticated, function(req, res, next) {
     var playId = req.body.pid;
 
     res.send({
@@ -49,7 +50,7 @@ router.post('/', isSecure, function(req, res, next) {
 });
 
 // DELETE, 위시리스트 삭제
-router.delete('/:wid', isSecure, function(req, res, next) {
+router.delete('/:wid', isSecure, isAuthenticated, function(req, res, next) {
     var wishlistId = req.params.wid;
 
     res.send({

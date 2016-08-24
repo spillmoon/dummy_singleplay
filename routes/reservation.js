@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var isSecure = require('./common').isSecure;
+var isAuthenticated = require('./common').isAuthenticated;
 //var Wishlist = require('../models/wishlist');
-//var isAuthenticated = require('./common').isAuthenticated;
+
 
 // GET, 예약 목록
-router.get('/', isSecure, function(req, res, next) {
+router.get('/', isSecure, isAuthenticated, function(req, res, next) {
     var startIndex = parseInt(req.query.start, 10);
     if (req.url.match(/\/\?start=\d/i)) {
         res.send({
@@ -29,7 +30,7 @@ router.get('/', isSecure, function(req, res, next) {
 });
 
 // POST, 예약하기
-router.post('/', isSecure, function(req, res, next) {
+router.post('/', isSecure, isAuthenticated, function(req, res, next) {
     var playId  = req.body.playId;
     var rsvSeat = req.body.rsvSeat;
 
@@ -39,7 +40,7 @@ router.post('/', isSecure, function(req, res, next) {
 });
 
 // GET, 예약 상세 정보
-router.get('/:rid', isSecure, function(req, res, next) {
+router.get('/:rid', isSecure, isAuthenticated, function(req, res, next) {
     var rsvId = req.params.rid;
     var rsvSeat = [];
     rsvSeat = ["S-A9", "S-A10"];

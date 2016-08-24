@@ -28,11 +28,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // req에 cookies를 달아서 보냄
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: true,
-//   saveUninitialized: true
-// }));
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true
+}));
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
 //   store: new RedisStore({
@@ -43,8 +43,8 @@ app.use(cookieParser()); // req에 cookies를 달아서 보냄
 //   resave: true, // 변경된 게 없으면 세션을 저장하지 말아라.
 //   saveUninitialized: false // 저장된 게 없으면 세션을 생성하지 말아라.
 // }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/cast', express.static(path.join(__dirname, 'uploads/images/cast'))); // 마운트포인트 매핑
 app.use('/poster', express.static(path.join(__dirname, 'uploads/images/poster'))); // 마운트포인트 매핑
