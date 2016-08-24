@@ -3,9 +3,10 @@ var router = express.Router();
 var formidable = require('formidable');
 var path = require('path');
 var url = require('url');
+var isSecure = require('./common').isSecure;
 
 // PUT, 프로필, PUSH 수정
-router.put('/me', function(req, res, next) {
+router.put('/me', isSecure, function(req, res, next) {
     var action = req.body.action;
     if (action == "push") {
         var pushInfo = {};
@@ -52,7 +53,7 @@ router.put('/me', function(req, res, next) {
 });
 
 // 쿠폰 목록 조회
-router.get('/me/coupons', function(req, res, next) {
+router.get('/me/coupons', isSecure, function(req, res, next) {
     if (req.url.match(/\?start=\d+/i)) {
         var startIndex = parseInt(req.query.start, 10);
 
