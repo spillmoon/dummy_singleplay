@@ -32,15 +32,9 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (userEmail, done) {
-    // User.findCustomer(id, function(err, user) {
-    //     if (err) {
-    //         return done(err);
-    //     }
-    //     done(null, user);
-    // });
     User.findUser(userEmail, function (err, user) {
         if (err) {
-            done(err);
+            return done(err);
         }
         done(null, user);
     });
@@ -112,7 +106,7 @@ router.get('/facebook/callback', passport.authenticate('facebook'), function (re
     res.send({message: 'facebook callback'});
 });
 
-router.post('/facebook/token', passport.authenticate('facebook-token', {scope: ['email']}), function (req, res, next) {
+router.post('/facebook/token', passport.authenticate('facebook-token'), function (req, res, next) {
     res.send(req.user ? '성공' : '실패');
 });
 
