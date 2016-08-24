@@ -1,16 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+// POST, 별점 주기
 router.post('/', function(req, res, next) {
-    var pid = req.body.id;
+    var playId = req.body.pid;
     var starScore = req.body.starScore;
 
     res.send({
         result:
         {
-            message: "별점 주기 성공",
-            pid: req.body.id,
-            starScore: req.body.starScore
+            message: "평가해주셔서 감사합니다."
         }
     });
 });

@@ -6,18 +6,16 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
-var redis = require('redis'); // 모듈 설치하고 나서 --save
-var redisClient = redis.createClient();
-var RedisStore = require('connect-redis')(session); // session 모듈을 store로 사용
 
 var auth = require('./routes/auth');
 var playlist = require('./routes/playlist');
 var reservation = require('./routes/reservation');
 var wishlist = require('./routes/wishlist');
-// var user = require('./routes/user');
 var board = require('./routes/board');
 var review = require('./routes/review');
-// var notification = require('./routes/notification');
+var user = require('./routes/user');
+var notification = require('./routes/notification');
+
 var app = express();
 
 // view engine setup
@@ -48,16 +46,18 @@ app.use(cookieParser()); // req에 cookies를 달아서 보냄
 // app.use(passport.initialize());
 // app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/images', express.static(path.join(__dirname, 'uploads/images/menus'))); // 마운트포인트 매핑
+app.use('/cast', express.static(path.join(__dirname, 'uploads/images/cast'))); // 마운트포인트 매핑
+app.use('/poster', express.static(path.join(__dirname, 'uploads/images/poster'))); // 마운트포인트 매핑
+app.use('/profile', express.static(path.join(__dirname, 'uploads/images/profile'))); // 마운트포인트 매핑
 
 app.use('/auth', auth);
-//app.use('/notifications', notification); //(url, 모듈명)
 app.use('/playlists', playlist);
 app.use('/reservations', reservation);
 app.use('/wishlists', wishlist);
-// app.use('/users', user);
 app.use('/boards', board);
 app.use('/reviews', review);
+app.use('/users', user);
+app.use('/notifications', notification); //(url, 모듈명)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,16 +3,17 @@ var router = express.Router();
 //var Wishlist = require('../models/wishlist');
 //var isAuthenticated = require('./common').isAuthenticated;
 
-// /boards?start=10
+// GET, 공지사항, 이벤트 목록
 router.get('/', function(req, res, next) {
     if (req.url.match(/\/\?start=\d/i)) {
+        var startIndex = parseInt(req.query.start, 10);
         res.send({
             totalItems: 30,
-            itmesPerPage: 10,
-            startIndex: 10,
+            itemsPerPage: 10,
+            startIndex: startIndex,
             paging: {
-                prev: "http://server:port/boards?start=0",
-                next: "http://server:port/boards?start=20"
+                prev: "http://server:port/boards?start=" + (startIndex-10),
+                next: "http://server:port/boards?start=" + (startIndex+10)
             },
             results: [{
                 boardNo: 1,
