@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
+var redis = require('redis');
+var redisClient = redis.createClient();
+var RedisStore = require('connect-redis')(session);
 
 var auth = require('./routes/auth');
 var playlist = require('./routes/playlist');
@@ -28,21 +31,21 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // req에 cookies를 달아서 보냄
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true
-}));
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
-//   store: new RedisStore({
-//     host: "127.0.0.1",
-//     port: 6379,
-//     client: redisClient
-//   }),
-//   resave: true, // 변경된 게 없으면 세션을 저장하지 말아라.
-//   saveUninitialized: false // 저장된 게 없으면 세션을 생성하지 말아라.
+//   resave: true,
+//   saveUninitialized: true
 // }));
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  store: new RedisStore({
+    host: "127.0.0.1",
+    port: 6379,
+    client: redisClient
+  }),
+  resave: true, // 변경된 게 없으면 세션을 저장하지 말아라.
+  saveUninitialized: false // 저장된 게 없으면 세션을 생성하지 말아라.
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
