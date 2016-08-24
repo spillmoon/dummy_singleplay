@@ -6,15 +6,15 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var FacebookTokenStrategy = require('passport-facebook-token');
 var User = require('../models/user');
 
-passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function(email, password, done) {
-    User.findByEmail(email, function(err, user) {
+passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function (email, password, done) {
+    User.findByEmail(email, function (err, user) {
         if (err) {
             return done(err);
         }
         if (!user) {
             return done(null, false);
         }
-        User.verifyPassword(password, user.password, function(err, result) {
+        User.verifyPassword(password, user.password, function (err, result) {
             if (err) {
                 return done(err);
             }
@@ -25,68 +25,57 @@ passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password
             done(null, user);
         })
     });
-    // var userEmail = 'test@naver.com';
-    // var password = '123';
-    //
-    // if ((userEmail === req.body.email) && (password === req.body.password)) {
-    //     res.send({
-    //         message: '성공'
-    //     });
-    // }
-    // res.send({
-    //     message: '실패'
-    // });
 }));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function(userEmail, done) {
+passport.deserializeUser(function (userEmail, done) {
     // User.findCustomer(id, function(err, user) {
     //     if (err) {
     //         return done(err);
     //     }
     //     done(null, user);
     // });
-    User.findUser(userEmail, function(err, user) {
+    User.findUser(userEmail, function (err, user) {
         if (err) {
             done(err);
         }
         done(null, user);
     });
 });
-//
-// passport.use(new FacebookStrategy({
-//         clientID: process.env.FACEBOOK_APP_ID,
-//         clientSecret: process.env.FACEBOOK_APP_SECRET,
-//         callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-//         profileFields: ['id', 'displayName', 'name', 'gender', 'profileUrl', 'photos', 'emails']
-//     },
-//     function(accessToken, refreshToken, profile, done) {
-//         console.log(accessToken);
-//         User.findOrCreate(profile, function (err, user) {
-//             if (err) {
-//                 return done(err);
-//             }
-//             return done(null, user);
-//         });
-//     }));
-//
-// passport.use(new FacebookTokenStrategy({
-//     clientID: process.env.FACEBOOK_APP_ID,
-//     clientSecret: process.env.FACEBOOK_APP_SECRET
-// }, function(accessToken, refreshToken, profile, done) {
-//     User.findOrCreate(profile, function (err, user) {
-//         if (err) {
-//             return done(err);
-//         }
-//         return done(null, user);
-//     });
-// }));
 
-router.post('/local/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user) {
+passport.use(new FacebookStrategy({
+        clientID: process.env.FACEBOOK_APP_ID,
+        clientSecret: process.env.FACEBOOK_APP_SECRET,
+        callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+        profileFields: ['id', 'displayName', 'name', 'gender', 'profileUrl', 'photos']
+    },
+    function (accessToken, refreshToken, profile, done) {
+        console.log(accessToken);
+        User.findOrCreate(profile, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            return done(null, user);
+        });
+    }));
+
+passport.use(new FacebookTokenStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET
+}, function (accessToken, refreshToken, profile, done) {
+    User.findOrCreate(profile, function (err, user) {
+        if (err) {
+            return done(err);
+        }
+        return done(null, user);
+    });
+}));
+
+router.post('/local/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user) {
         if (err) {
             return next(err);
         }
@@ -95,14 +84,14 @@ router.post('/local/login', function(req, res, next) {
                 message: 'Login failed!!!'
             });
         }
-        req.login(user, function(err) {
+        req.login(user, function (err) {
             if (err) {
                 return next(err);
             }
             next();
         });
     })(req, res, next);
-}, function(req, res, next) {
+}, function (req, res, next) {
     // var user = {};
     // user.email = req.user.email;
     // user.name = req.user.name;
@@ -112,19 +101,19 @@ router.post('/local/login', function(req, res, next) {
     });
 });
 
-router.get('/local/logout', function(req, res, next) {
+router.get('/local/logout', function (req, res, next) {
     req.logout();
-    res.send({ message: 'local logout' });
+    res.send({message: 'local logout'});
 });
 
-// router.get('/facebook', passport.authenticate('facebook', {scope : ['email']}));
-//
-// router.get('/facebook/callback', passport.authenticate('facebook'), function(req, res, next) {
-//     res.send({ message: 'facebook callback' });
-// });
-//
-// router.post('/facebook/token', passport.authenticate('facebook-token', {scope : ['email']}), function(req, res, next) {
-//     res.send(req.user? '성공' : '실패');
-// });
+router.get('/facebook', passport.authenticate('facebook'));
+
+router.get('/facebook/callback', passport.authenticate('facebook'), function (req, res, next) {
+    res.send({message: 'facebook callback'});
+});
+
+router.post('/facebook/token', passport.authenticate('facebook-token', {scope: ['email']}), function (req, res, next) {
+    res.send(req.user ? '성공' : '실패');
+});
 
 module.exports = router;
