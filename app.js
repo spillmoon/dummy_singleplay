@@ -31,16 +31,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser()); // req에 cookies를 달아서 보냄
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: true,
-//   saveUninitialized: true
-// }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   store: new RedisStore({
-    host: "127.0.0.1",
-    port: 6379,
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
     client: redisClient
   }),
   resave: true, // 변경된 게 없으면 세션을 저장하지 말아라.
