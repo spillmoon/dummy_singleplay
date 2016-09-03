@@ -5,9 +5,10 @@ var path = require('path');
 var url = require('url');
 var isSecure = require('./common').isSecure;
 var isAuthenticated = require('./common').isAuthenticated;
+var User = require('../models/user');
 
-// PUT, 프로필, PUSH 수정
-router.put('/me', isSecure, isAuthenticated, function(req, res, next) {
+// todo: PUT, 프로필, PUSH 수정 구현 에정
+router.put('/me', isSecure,/* isAuthenticated,*/ function(req, res, next) {
     var action = req.body.action;
     if (action == "push") {
         var pushInfo = {};
@@ -24,9 +25,10 @@ router.put('/me', isSecure, isAuthenticated, function(req, res, next) {
             });
         }
         res.send({
+            code: 1,
             message: "알림 변경 성공"
         });
-    } else {
+    } else if (action == "profile") {
         var form = new formidable.IncomingForm();
         form.uploadDir = path.join(__dirname, '../uploads/images/profile');
         form.keepExtensions = true;
@@ -44,7 +46,8 @@ router.put('/me', isSecure, isAuthenticated, function(req, res, next) {
             if (userInfo.image)
                 name = userInfo.image.name;
             res.send({
-                profileImg: url.resolve("http://127.0.0.1:3000", "/profile/"+ name),
+                code: 1,
+                profileImg: url.resolve("https://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:443/profileimg/", name),
                 userName: userInfo.name,
                 userEmail: userInfo.email,
                 userPhone: userInfo.phone
@@ -53,27 +56,17 @@ router.put('/me', isSecure, isAuthenticated, function(req, res, next) {
     }
 });
 
-// 쿠폰 목록 조회
-router.get('/me/coupons', isSecure, isAuthenticated, function(req, res, next) {
-    if (req.url.match(/\?start=\d+/i)) {
-        var startIndex = parseInt(req.query.start, 10);
-
+// 쿠폰 목록 조회, https, 로그인 해야 사용 가능
+router.get('/me/coupons', isSecure,/* isAuthenticated,*/ function(req, res, next) {
+    User.couponList(1/*req.user.id*/, function(err, coupons) { // 매개변수로 세션을 통해 request객체에 붙은 user의 id 사용
+        if (err) {
+            return next(err);
+        }
         res.send({
-            totalItems: 15,
-            itemsPerPage: 10,
-            startIndex: startIndex,
-            paging: {
-                prev: "http://server:port/users/me/coupons?start=" + (startIndex-10),
-                next: "http://server:port/users/me/coupons?start=" + (startIndex+10)
-            },
-            results: [{
-                couponNo: 10023,
-                couponName: "추석 한정 10% 할인 쿠폰",
-                periodStart: "2016-09-14",
-                periodEnd: "2016-09-18"
-            }]
+            code: 1,
+            results: coupons
         });
-    }
+    });
 });
 
 module.exports = router;

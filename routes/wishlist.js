@@ -2,59 +2,56 @@ var express = require('express');
 var router = express.Router();
 var isSecure = require('./common').isSecure;
 var isAuthenticated = require('./common').isAuthenticated;
-//var Wishlist = require('../models/wishlist');
+var Wishlist = require('../models/wishlist');
 
-
-// GET, 위시리스트 목록
-router.get('/', isSecure, isAuthenticated, function(req, res, next) {
-    if (req.url.match(/\?sort=\d+&start=\d+/i)) {
-        var startIndex = parseInt(req.query.start, 10);
+// GET, 위시리스트 목록 조회
+router.get('/', isSecure,/* isAuthenticated,*/ function(req, res, next) {
+    // ../models/wishlist의 listWish 함수 실행
+    Wishlist.listWish(function (err, wishlist) {
+        if (err) {
+            return next(err);
+        }
+        // 출력 결과
         res.send({
-            totalItems: 50,
-            itemsPerPage: 10,
-            startIndex: startIndex,
-            paging: {
-                prev: "http://server:port/wishlists?sort=0&start="+(startIndex-10),
-                next: "http://server:port/wishlists?sort=0&start="+(startIndex+10)
-            },
-            results: [{
-                wishlistId: 13,
-                playId: 1,
-                playName: "위키드",
-                theme: "뮤지컬",
-                placeName: "디큐브 아트센터",
-                playDay: "2016-08-22",
-                playTime: "19:00",
-                price: 80000,
-                salePrice: 68000,
-                starScore: 5,
-                //poster: "http://server:port/images/poster/filename.jpg”
-            }]
+            code: 1, // 성공 코드
+            results: wishlist
         });
-    }
+    });
 });
 
 // POST, 위시리스트 추가
-router.post('/', isSecure, isAuthenticated, function(req, res, next) {
-    var playId = req.body.pid;
+router.post('/', isSecure,/* isAuthenticated,*/ function(req, res, next) {
+    // 매개변수를 저장할 변수 선언
+    var userId = 1; //req.user.id; // 세션의 user.id -> userId
+    var playId = req.body.playId; // body를 통해 공연ID를 매개변수로 받아온다.
 
-    res.send({
-        results: {
-            messege: "위시리스트 추가 완료",
-            thumbs: [
-                "http://server:port/images/thumbnails/thumbfile1.jpg",
-                "http://server:port/images/thumbnails/thumbfile2.jpg",
-                "http://server:port/images/thumbnails/thumbfile3.jpg"]
+    // 매개변수를 받아 ../models/wishlist의 createWish 함수 실행
+    Wishlist.createWish(userId, playId, function (err, thumbnail) {
+        if (err) {
+            return next(err);
         }
+        // 출력 결과
+        res.send({
+            code: 1, // 성공 코드
+            results: thumbnail // 위시리스트 추가하면 기존에 위시리스트에 있던 공연 포스터 이미지 URL을 출력한다.
+        });
     });
 });
 
 // DELETE, 위시리스트 삭제
-router.delete('/:wid', isSecure, isAuthenticated, function(req, res, next) {
-    var wishlistId = req.params.wid;
+router.delete('/:wid', isSecure,/* isAuthenticated,*/ function(req, res, next) {
+    var wishId = req.params.wid; // 매개변수를 동적 파라미터 :wid 입력 -> wishId(위시ID)
 
-    res.send({
-        result : "위시리스트 삭제 완료"
+    // 매개변수를 받아 ../models/wishlist의 deleteWish 함수 실행
+    Wishlist.deleteWish(wishId, function(err) {
+        if (err) {
+            return next(err);
+        }
+        // 출력 결과
+        res.send({
+            code: 1, // 성공 코드
+            message : "위시리스트 삭제 완료"
+        });
     });
 });
 

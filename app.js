@@ -44,9 +44,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/cast', express.static(path.join(__dirname, 'uploads/images/cast'))); // 마운트포인트 매핑
-app.use('/poster', express.static(path.join(__dirname, 'uploads/images/poster'))); // 마운트포인트 매핑
-app.use('/profile', express.static(path.join(__dirname, 'uploads/images/profile'))); // 마운트포인트 매핑
+app.use('/boardimg', express.static(path.join(__dirname, 'uploads/images/board'))); // '/boards' url의 경우 오른쪽의 경로로 연결하겠다.
+app.use('/castimg', express.static(path.join(__dirname, 'uploads/images/cast'))); // 마운트포인트 매핑
+app.use('/placeimg', express.static(path.join(__dirname, 'uploads/images/place'))); // '/boards' url의 경우 오른쪽의 경로로 연결하겠다.
+app.use('/posterimg', express.static(path.join(__dirname, 'uploads/images/poster'))); // 마운트포인트 매핑
+app.use('/profileimg', express.static(path.join(__dirname, 'uploads/images/profile'))); // 마운트포인트 매핑
 
 app.use('/auth', auth);
 app.use('/playlists', playlist);
