@@ -59,4 +59,17 @@ router.get('/:rid', isSecure,/* isAuthenticated,*/ function(req, res, next) {
     })
 });
 
+router.delete('/:rid', isSecure, function(req, res, next) {
+    var rsvId = req.params.rid;
+    Reservation.deleteRsv(rsvId, function(err, result) {
+        if (err) {
+            return next(err);
+        }
+        res.send({
+            code: 1,
+            message: "예약 취소 성공"
+        });
+    });
+});
+
 module.exports = router;

@@ -100,13 +100,13 @@ function findOrCreate(profile, callback) {
 // 쿠폰함 조회 구현하기
 function couponList(uid, callback) {
     var coupons = [];
-        coupons.push({
-            couponNo: 1,
-            couponName: "추석 맞이 10% 할인 쿠폰",
-            saveOff: 10,
-            periodStart: "2016-09-01",
-            periodEnd: "2016-09-20"
-        });
+    coupons.push({
+        couponNo: 1,
+        couponName: "추석 맞이 10% 할인 쿠폰",
+        saveOff: 10,
+        periodStart: "2016-09-01",
+        periodEnd: "2016-09-20"
+    });
     callback(null, coupons);
 }
 
