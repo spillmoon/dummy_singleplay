@@ -107,7 +107,17 @@ router.get('/facebook/callback', passport.authenticate('facebook'), function (re
 });
 
 router.post('/facebook/token', passport.authenticate('facebook-token', { scope : ['email']}), function (req, res, next) {
-    res.send(req.user ? '성공' : '실패');
+    if (req.user) {
+        res.send({
+            code: 1,
+            result: {
+                name: "홍길동",
+                profileImg: "http://server:port/images/profile/filename.jpg",
+                couponCnt: 4,
+                mileage: 130
+            }
+        });
+    }
 });
 
 module.exports = router;

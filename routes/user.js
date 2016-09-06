@@ -60,13 +60,14 @@ router.put('/me', isSecure,/* isAuthenticated,*/ function(req, res, next) {
 });
 
 router.get('/me', isSecure,/* isAuthenticated, */function(req, res, next) {
-
-
-        res.send({
+    res.send({
+        code: 1,
+        result: {
             name: "문승필",
             email: "spillmoon@naver.com",
             phone: "010-2503-4236"
-        });
+        }
+    });
 });
 
 // 쿠폰 목록 조회, https, 로그인 해야 사용 가능
