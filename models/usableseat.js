@@ -8,13 +8,11 @@ function seatInfo(playId, callback) {
     info.placeAddress = "서울시 종로구";
     info.placeName = "디큐브 아트센터";
     info.seatInfo = [];
-    info.seatInfo.push({usableSeatNo: 3, seatClass: "VIP", seatInfo: "1F-A01"},
-        {usableSeatNo: 8, seatClass: "R", seatInfo: "1F-D42"},
-        {usableSeatNo: 15, seatClass: "S", seatInfo: "1F-E19"}
+    info.seatInfo.push(
+        {usableSeatNo: 3, seatClass: "VIP", seatInfo: "1F-A01", price: 58500},
+        {usableSeatNo: 8, seatClass: "R", seatInfo: "1F-D42", price: 49500},
+        {usableSeatNo: 15, seatClass: "S", seatInfo: "1F-E19", price: 36000}
     );
-    info.VIPprice = 58500;
-    info.Rprice = 49500;
-    info.Sprice = 36000;
     callback(null, info);
 }
 
