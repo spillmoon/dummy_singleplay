@@ -202,10 +202,10 @@ function findPlay(pid, callback) {
     play.starScore = 8.5;
     play.userCount = 312;
     play.poster = "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/posterimg/play1_poster.jpg";
-    play.cast = ["http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast1.jpg",
-        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast2.jpg",
-        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast3.jpg",
-        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast4.jpg"];
+    play.cast = ["http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast1.png",
+        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast2.png",
+        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast3.png",
+        "http://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:80/castimg/play1_cast4.png"];
     play.usableSeat = [ 1, 1, 3 ];
     callback(null, play);
 }

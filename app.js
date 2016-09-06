@@ -59,7 +59,7 @@ app.use('/boards', board);
 app.use('/reviews', review);
 app.use('/users', user);
 app.use('/notifications', notification); //(url, 모듈명)
-app.use('/usableseats', usableseat)
+app.use('/usableseats', usableseat);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
