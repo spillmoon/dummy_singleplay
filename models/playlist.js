@@ -188,6 +188,7 @@ function findPlay(pid, callback) {
 
     play.playId = 1;
     play.isWish = 1;
+    play.wid = 3;
     play.playName = "잭더리퍼";
     play.theme = "뮤지컬";
     play.placeName = "디큐브 아트센터";
