@@ -35,9 +35,11 @@ router.post('/', isSecure,/* isAuthenticated,*/ function(req, res, next) {
             return next(err);
         }
         // 출력 결과
-        res.send({
-            code: 1, // 성공 코드
-            message: "예약 성공"
+        Reservation.findRsv(1, function(err, result) {
+            res.send({
+                code: 1, // 성공 코드
+                result: result
+            });
         });
     });
 });
