@@ -26,35 +26,20 @@ router.put('/me', isSecure,/* isAuthenticated,*/ function(req, res, next) {
         }
         res.send({
             code: 1,
-            message: "알림 변경 성공",
-            receiveFromClient: pushInfo
+            message: "알림 변경 성공"
         });
     } else if (action == "profile") {
-        var form = new formidable.IncomingForm();
-        form.uploadDir = path.join(__dirname, '../uploads/images/profile');
-        form.keepExtensions = true;
-        form.multiples = true;
-        form.parse(req, function(err, fields, files) {
-            if (err) {
-                return next(err);
+        var userInfo = {};
+        userInfo.userName = req.body.userName;
+        userInfo.userEmail = req.body.userEmail;
+        userInfo.userPhone = req.body.userPhone;
+        res.send({
+            code: 1,
+            result: {
+                userName: userInfo.userName,
+                userEmail: userInfo.userEmail,
+                userPhone: userInfo.userPhone
             }
-            var userInfo = {};
-            userInfo.userName = fields.userName;
-            userInfo.userEmail = fields.userEmail;
-            userInfo.userPhone = fields.userPhone;
-            userInfo.userImage = files.userImage;
-            var name = "";
-            if (userInfo.userImage)
-                name = userInfo.userImage.name;
-            res.send({
-                code: 1,
-                result:{
-                    profileImg: url.resolve("https://ec2-52-78-118-8.ap-northeast-2.compute.amazonaws.com:443/profileimg/", name),
-                    userName: userInfo.userName,
-                    userEmail: userInfo.userEmail,
-                    userPhone: userInfo.userPhone
-                }
-            });
         });
     }
 });
